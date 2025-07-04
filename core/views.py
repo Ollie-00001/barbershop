@@ -17,6 +17,7 @@ def orders(request):
     for order in orders_data:
         order_copy = order.copy()
         order_copy["master_name"] = masters_by_id.get(order["master_id"], "Неизвестный мастер")
+        order_copy["status_class"] = order_copy["status"].strip().lower()
         orders_with_master.append(order_copy)
 
     return render(request, "orders.html", {
