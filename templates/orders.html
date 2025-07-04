@@ -5,12 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
-    <title>Заказы</title>
+    <title>Заявки</title>
 </head>
 <body>
-    <h1>Список заказов</h1>
-
-
+    <h1>Все заявки</h1>
+    <ul>
+        {% for order in orders %}
+        <li>
+            <p><strong>ID заявки:</strong> {{ order.id }}</p>
+            <p><strong>Клиент:</strong> {{ order.client_name }}</p>
+            <p><strong>Мастер:</strong> {{ order.master_name }}</p>
+            <p><strong>Дата:</strong> {{ order.date }}</p>
+            <p><strong>Статус:</strong> {{ order.status }}</p>
+            <p><strong>Услуги:</strong></p>
+            <ul>
+                {% for service in order.services %}
+                <li>{{ service }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <hr>
+        {% empty %}
+        <li>Заявок пока нет</li>
+        {% endfor %}
+    </ul>
 <script src="{% static 'main.js' %}"></script>
 </body>
 </html>

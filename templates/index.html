@@ -9,8 +9,20 @@
 </head>
 <body>
     <h1>Добро пожаловать!</h1>
+    <h2>Наши мастера:</h2>
+    <ul>
+        {% for master in masters %}
+            <li>{{ master.name }}</li>
+        {% endfor %}
+    </ul>
 
-
+    <h2>Услуги:</h2>
+    <ul>
+        {% for service in services %}
+            <li>{{ service }}</li>
+        {% endfor %}
+    </ul>
+    
 <script src="{% static 'main.js' %}"></script>
 </body>
 </html>
