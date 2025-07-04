@@ -9,26 +9,41 @@
 </head>
 <body>
     <h1>Все заявки</h1>
-    <ul>
-        {% for order in orders %}
-        <li>
-            <p><strong>ID заявки:</strong> {{ order.id }}</p>
-            <p><strong>Клиент:</strong> {{ order.client_name }}</p>
-            <p><strong>Мастер:</strong> {{ order.master_name }}</p>
-            <p><strong>Дата:</strong> {{ order.date }}</p>
-            <p><strong>Статус:</strong> {{ order.status }}</p>
-            <p><strong>Услуги:</strong></p>
-            <ul>
-                {% for service in order.services %}
-                <li>{{ service }}</li>
-                {% endfor %}
-            </ul>
-        </li>
-        <hr>
-        {% empty %}
-        <li>Заявок пока нет</li>
-        {% endfor %}
-    </ul>
+    <table class="orders-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Клиент</th>
+                <th>Мастер</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th>Услуги</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr class="status-{{ order.status_class }}">
+                <td>{{ order.id }}</td>
+                <td>{{ order.client_name }}</td>
+                <td>{{ order.master_name }}</td>
+                <td>{{ order.date }}</td>
+                <td>{{ order.status }}</td>
+                <td>
+                    <ul>
+                        {% for service in order.services %}
+                            <li>{{ service }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">Заявок пока нет</td>
+            </tr>
+            {% endfor %}
+        </ul>
+        </tbody>
+    </table>
 <script src="{% static 'script.js' %}"></script>
 </body>
 </html>
