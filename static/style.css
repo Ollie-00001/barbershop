@@ -1,0 +1,53 @@
+body {
+    font-family: sans-serif;
+    margin: 40px;
+    background-color: #f9f9f9;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.orders-table th,
+.orders-table td {
+    border: 1px solid #ddd;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.orders-table th {
+    background-color: #f0f0f0;
+}
+
+/* .orders-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+} */
+
+.status-новая {
+    background-color: #e1f5fe;
+}
+
+.status-подтвержденная {
+    background-color: #fff9c4;
+}
+
+.status-выполненная {
+    background-color: #c8e6c9;
+}
+
+.status-отмененная {
+    background-color: #ffcdd2;
+}
+
+ul {
+    padding-left: 20px;
+    margin: 0;
+}
