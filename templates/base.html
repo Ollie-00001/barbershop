@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Мета-теги -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Барбершоп">
+    <meta name="keywords" content="барбершоп, стрижка, борода, стрижка бороды, укладка, бритье">
+    <meta name="author" content="Ollie">
+
+    <title>{% block title %}<!-- Название страницы -->{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+
+    {% block styles %}
+    <!-- Дополнительные стили от дочерних шаблонов -->
+    {% endblock %}
+
+    {% block extra_head %}
+    <!-- Здесь могут быть дополнительные мета-теги -->
+    {% endblock %}
+</head>
+<body>
+    <header>
+        {% block header %}
+        <!-- Поле для навигации -->
+        {% endblock %}
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Основной контент -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        {% block footer %}
+        <!-- Футер -->
+        {% endblock %}
+    </footer>
+
+<script src="{% static 'script.js' %}"></script>
+{% block scripts %}
+<!-- Скрипты -->
+{% endblock %}
+</body>
+</html>
