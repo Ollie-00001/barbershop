@@ -1,21 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <title>Спасибо за заказ!</title>
-</head>
-<body>
+
+{% block title %}Спасибо за заявку{% endblock %}
+
+{% block content %}
+<div class="container">
     <h1>Благодарим за заявку!</h1>
     <p>Мы свяжемся с вами в ближайшее время.</p>
 
     <p>Вы будете перенаправлены на главную через <span id="countdown">5</span> секунд.</p>
 
     <a href="{% url 'index' %}" class="button">Вернуться на главную</a>
+</div>
+{% endblock %}
 
+{% block scripts %}
 <script src="{% static 'script.js' %}"></script>
-</body>
-</html>
+{% endblock %}

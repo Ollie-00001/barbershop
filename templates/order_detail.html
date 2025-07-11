@@ -4,6 +4,7 @@
 {% block title %}Детали заявки{% endblock %}
 
 {% block content %}
+<div class="container">
     <h1>Заявка №{{ order.id }}</h1>
         <p><strong>Клиент:</strong> {{ order.client_name }}</p>
         <p><strong>Дата:</strong> {{ order.date }}</p>
@@ -17,6 +18,7 @@
     </ul>
 
     <p><a href="{% url 'orders' %}">Вернуться к списку заявок</a></p>
+</div>
 {% endblock %}
 
 {% block scripts %}

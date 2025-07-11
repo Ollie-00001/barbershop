@@ -25,14 +25,7 @@
     {% endblock %}
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'index' %}">О нас</a></li>
-            <li><a href="{% url 'services' %}">Услуги</a></li>
-            <li><a href="{% url 'masters' %}">Мастера</a></li>
-            <li><a href="{% url 'appointment' %}">Запись</a></li>
-        </ul>
-    </nav>
+{% include 'includes/menu.html' %}
 
     <header>
         {% block header %}

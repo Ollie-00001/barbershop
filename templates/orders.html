@@ -4,29 +4,17 @@
 {% block title %}Заявки{% endblock %}
 
 {% block content %}
+<div class="container">
     <h1>Все заявки</h1>
-    <table class="orders-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Клиент</th>
-                <th>Статус</th>
-            </tr>
-        </thead>
-        <tbody>
+
             {% for order in orders %}
-            <tr class="status-{{ order.status_class }}">
-                <td><a href="{% url 'order_detail' order_id=order.id %}">{{ order.id }}</a></td>
-                <td>{{ order.client_name }}</td>
-                <td>{{ order.status }}</td>
-            </tr>
+                {% include 'includes/order_card.html' with order=order %}
             {% empty %}
-            <tr>
-                <td colspan="6">Заявок пока нет</td>
-            </tr>
+                <p>Заявок пока нет.</p>
             {% endfor %}
         </tbody>
     </table>
+</div>
 {% endblock %}
 
 {% block scripts %}
