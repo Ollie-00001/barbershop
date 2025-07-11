@@ -1,17 +1,13 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <title>Детали заявки</title>
-</head>
-<body>
+
+{% block title %}Детали заявки{% endblock %}
+
+{% block content %}
     <h1>Заявка №{{ order.id }}</h1>
         <p><strong>Клиент:</strong> {{ order.client_name }}</p>
         <p><strong>Дата:</strong> {{ order.date }}</p>
-        <p><strong>Мастер:</strong> {{ master_name }}</p>
+        <p><strong>Мастер:</strong> {{ order.master_name }}</p>
         <p><strong>Статус:</strong> {{ order.status }}</p>
         <p><strong>Услуги:</strong></p>
     <ul>
@@ -21,7 +17,8 @@
     </ul>
 
     <p><a href="{% url 'orders' %}">Вернуться к списку заявок</a></p>
+{% endblock %}
 
+{% block scripts %}
 <script src="{% static 'script.js' %}"></script>
-</body>
-</html>
+{% endblock %}
