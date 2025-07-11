@@ -8,20 +8,18 @@
     <title>Барбершоп</title>
 </head>
 <body>
-    <h1>Добро пожаловать!</h1>
-    <h2>Наши мастера:</h2>
-    <ul>
-        {% for master in masters %}
-            <li>{{ master.name }}</li>
-        {% endfor %}
-    </ul>
+    <!-- Навигация -->
 
-    <h2>Услуги:</h2>
-    <ul>
-        {% for service in services %}
-            <li>{{ service }}</li>
-        {% endfor %}
-    </ul>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">О нас</a></li>
+            <li><a href="{% url 'services' %}">Услуги</a></li>
+            <li><a href="{% url 'masters' %}" class="btn">Мастера</a></li>
+            <li><a href="{% url 'appointment' %}">Запись</a></li>
+        </ul>
+    </nav>
+
+    <h1>Добро пожаловать!</h1>
 
 <script src="{% static 'script.js' %}"></script>
 </body>
