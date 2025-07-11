@@ -1,53 +1,83 @@
 body {
     font-family: sans-serif;
-    margin: 40px;
     background-color: #f9f9f9;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
+.container {
+    max-width: 1200px;
+    margin: 0px;
+    padding: 20px;
 }
 
-.orders-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+/* Стиль навигационного меню */
+.main-nav {
+    background-color: #222;
+    color: white;
+    padding: 10px 20px;
 }
-
-.orders-table th,
-.orders-table td {
-    border: 1px solid #ddd;
-    padding: 12px 16px;
-    text-align: left;
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-
-.orders-table th {
-    background-color: #f0f0f0;
-}
-
-/* .orders-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-} */
-
-.status-новая {
-    background-color: #e1f5fe;
-}
-
-.status-подтвержденная {
-    background-color: #fff9c4;
-}
-
-.status-выполненная {
-    background-color: #c8e6c9;
-}
-
-.status-отмененная {
-    background-color: #ffcdd2;
-}
-
-ul {
-    padding-left: 20px;
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 40px;
+    padding-left: 0;
     margin: 0;
 }
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+}
+
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
+
+/* Добавляем стили для карточки заказа */
+.order-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.order-detail-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.status-новая { border-left: 5px solid gold; }
+.status-подтвержденная { border-left: 5px solid cornflowerblue; }
+.status-выполненная { border-left: 5px solid seagreen; }
+.status-отмененная { border-left: 5px solid crimson; }
