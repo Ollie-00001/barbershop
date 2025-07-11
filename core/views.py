@@ -1,17 +1,32 @@
 from django.shortcuts import render
-from .data import masters, services, orders as orders_data
+from .data import masters_list, services_list, orders as orders_data
+from django.contrib.auth.decorators import user_passes_test
 
-masters_by_id = {m["id"]: m["name"] for m in masters}
+masters_by_id = {m["id"]: m["name"] for m in masters_list}
+
+def is_staff_user(user):
+    return user.is_staff
 
 def index(request):
-    return render(request, 'index.html', {
-                  "masters": masters,
-                  "services": services,
+    return render(request, 'index.html')
+
+def masters_view(request):
+    return render(request, 'masters.html', {
+                  "masters": masters_list,
                   })
+
+def services_view(request):
+    return render(request, 'services.html', {
+                  "services": services_list,
+                  })
+
+def appointment(request):
+    return render(request, 'appointment.html')
 
 def thanks(request):
     return render(request, 'thanks.html')
 
+@user_passes_test(is_staff_user)
 def orders(request):
     orders_with_master = []
     for order in orders_data:
