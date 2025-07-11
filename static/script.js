@@ -14,3 +14,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }, 1000);
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const btn = document.getElementById("hamburger");
+    const links = document.getElementById("nav-links");
+    btn.addEventListener("click", () => {
+        links.classList.toggle("open");
+    });
+});
