@@ -1,0 +1,13 @@
+<div class="order-card status-{{ order.status_class }}">
+    <h3>Заявка от {{ order.client_name }}</h3>
+    <p><strong>Дата:</strong> {{ order.date }}</p>
+    <p><strong>Мастер:</strong> {{ order.master_name }}</p>
+    <p><strong>Услуги:</strong></p>
+    <ul>
+        {% for service in order.services %}
+            <li>{{ service }}</li>
+        {% endfor %}
+    </ul>
+    <p class="status-label"><strong>Статус:</strong> {{ order.status }}</p>
+    <a class="order-detail-btn" href="{% url 'order_detail' order_id=order.id %}">Подробнее</a>
+</div>

@@ -1,0 +1,16 @@
+<nav class="main-nav">
+    <div class="nav-container">
+        <button class="hamburger" id="hamburger">&#9776;</button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="{% url 'index' %}">О нас</a></li>
+            <li><a href="{% url 'services' %}">Услуги</a></li>
+            <li><a href="{% url 'masters' %}">Мастера</a></li>
+            <li><a href="{% url 'appointment' %}">Запись</a></li>
+            {% if user.is_authenticated and user.is_staff %}
+                <li><a href="{% url 'orders' %}">Заявки</a></li>
+                <li><a href="{% url 'admin:index' %}">Админка</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
