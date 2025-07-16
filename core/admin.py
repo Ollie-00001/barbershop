@@ -4,7 +4,7 @@ from .models import Master, Service, Review, Order
 
 @admin.register(Master)
 class MasterAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'address', 'experience', 'is_active')
+    list_display = ('name', 'phone', 'address', 'experience', 'is_active', 'display_services')
     search_fields = ('name', 'phone')
     list_filter = ('is_active', 'services')
     ordering = ('name',)
@@ -13,6 +13,11 @@ class MasterAdmin(admin.ModelAdmin):
             'fields': ('name', 'photo', 'phone', 'address', 'experience', 'services', 'is_active')
         }),
     )
+
+    def display_services(self, obj):
+        return ", ".join([service.name for service in obj.services.all()])
+    display_services.short_description = "Услуги"
+
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
@@ -40,7 +45,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('client_name', 'phone', 'status', 'appointment_date', 'date_created', 'master')
+    list_display = ('client_name', 'phone', 'status', 'appointment_date', 'date_created', 'master', 'display_services')
     search_fields = ('client_name', 'phone', 'master__name')
     list_filter = ('status', 'master')
     ordering = ('-date_created',)
@@ -53,6 +58,10 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'date_updated')
     date_hierarchy = 'date_created'
     actions = ['mark_as_completed', 'mark_as_canceled']
+
+    def display_services(self, obj):
+        return ", ".join([service.name for service in obj.services.all()])
+    display_services.short_description = "Услуги клиента"
 
     class Meta:
         ordering = ['-date_created']
