@@ -11,7 +11,7 @@ def is_staff_user(user):
 
 def index(request):
     masters = Master.objects.all()
-    reviews = Review.objects.all()
+    reviews = Review.objects.select_related("master").all()
     return render(request, 'index.html', {
         "masters": masters,
         "reviews": reviews
@@ -33,21 +33,10 @@ def appointment(request):
 def thanks(request):
     return render(request, 'thanks.html')
 
-@user_passes_test(is_staff_user)
-def orders(request):
-    orders_with_master = []
-    for order in orders_data:
-        order_copy = order.copy()
-        order_copy["master_name"] = masters_by_id.get(order["master_id"], "Неизвестный мастер")
-        order_copy["status_class"] = order_copy["status"].strip().lower()
-        orders_with_master.append(order_copy)
-
-    return render(request, "orders.html", {
-        "orders": orders_with_master,
-    })
-
 def order_detail(request, pk):
-    order = get_object_or_404(Order, pk=pk)
+    order = get_object_or_404(
+        Order.objects.select_related("master").prefetch_related("services"),
+        pk=pk)
     return render(request, "order_detail.html", {"order": order})
 
 @login_required
@@ -58,7 +47,7 @@ def orders(request):
     search_comment = request.GET.get("search_comment")
     search_master = request.GET.get("search_master")
 
-    orders = Order.objects.all().order_by("-date_created")
+    orders = Order.objects.select_related("master").prefetch_related("services").order_by("-date_created")
 
     if query:
         q_filter = Q()
