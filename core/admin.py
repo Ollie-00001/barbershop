@@ -45,7 +45,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('client_name', 'phone', 'status', 'appointment_date', 'date_created', 'master', 'display_services')
+    list_display = ('client_name', 'phone', 'status', 'appointment_date', 'date_created', 'master', 'display_services_admin')
     search_fields = ('client_name', 'phone', 'master__name')
     list_filter = ('status', 'master')
     ordering = ('-date_created',)
@@ -59,9 +59,9 @@ class OrderAdmin(admin.ModelAdmin):
     date_hierarchy = 'date_created'
     actions = ['mark_as_completed', 'mark_as_canceled']
 
-    def display_services(self, obj):
-        return ", ".join([service.name for service in obj.services.all()])
-    display_services.short_description = "Услуги клиента"
+    def display_services_admin(self, obj):
+        return obj.display_services
+    display_services_admin.short_description = "Услуги клиента"
 
     class Meta:
         ordering = ['-date_created']

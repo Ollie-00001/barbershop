@@ -21,6 +21,10 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.client_name} ({self.appointment_date.strftime('%d.%m %H:%M')})"
+    
+    @property
+    def display_services(self):
+        return ", ".join([service.name for service in self.services.all()])
 
 class Master(models.Model):
     name = models.CharField(max_length=150, verbose_name="Имя")
