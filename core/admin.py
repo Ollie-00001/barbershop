@@ -2,6 +2,10 @@ from django.contrib import admin
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .models import Master, Service, Review, Order
 
+admin.site.site_header = 'Панель управления барбершопа'
+admin.site.index_title = 'Администрирование'
+admin.site.site_title = 'Барбершоп "Скаттер" - Админка'
+
 @admin.register(Master)
 class MasterAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'address', 'experience', 'is_active', 'display_services')

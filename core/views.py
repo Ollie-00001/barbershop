@@ -46,8 +46,8 @@ def orders(request):
         "orders": orders_with_master,
     })
 
-def order_detail(request, order_id):
-    order = get_object_or_404(Order, pk=order_id)
+def order_detail(request, pk):
+    order = get_object_or_404(Order, pk=pk)
     return render(request, "order_detail.html", {"order": order})
 
 @login_required
