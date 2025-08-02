@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .data import masters_list, services_list, orders as orders_data
 from django.contrib.auth.decorators import user_passes_test, login_required
-from django.db.models import Q
+from django.db.models import Q, Sum
 from .models import Order, Master, Review
 
 masters_by_id = {m["id"]: m["name"] for m in masters_list}
@@ -35,8 +35,9 @@ def thanks(request):
 
 def order_detail(request, pk):
     order = get_object_or_404(
-        Order.objects.select_related("master").prefetch_related("services"),
-        pk=pk)
+        Order.objects.select_related("master").prefetch_related("services").annotate(total_price=Sum("services__price")),
+        pk=pk
+    )
     return render(request, "order_detail.html", {"order": order})
 
 @login_required
