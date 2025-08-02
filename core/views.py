@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .data import masters_list, services_list, orders as orders_data
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.db.models import Q
+from .models import Order
 
 masters_by_id = {m["id"]: m["name"] for m in masters_list}
 
@@ -40,13 +42,29 @@ def orders(request):
     })
 
 def order_detail(request, order_id):
-    order = next((o for o in orders_data if o["id"] == order_id), None)
-    if not order:
-        return render(request, "order_not_found.html", {"order_id": order_id}, status=404)
+    order = get_object_or_404(Order, pk=order_id)
+    return render(request, "order_detail.html", {"order": order})
 
-    order_copy = order.copy()
-    order_copy["master_name"] = masters_by_id.get(order["master_id"], "Неизвестный мастер")
+@login_required
+def orders(request):
+    query = request.GET.get("q", "")
+    search_name = request.GET.get("search_name", "on")
+    search_phone = request.GET.get("search_phone")
+    search_comment = request.GET.get("search_comment")
+    search_master = request.GET.get("search_master")
 
-    return render(request, "order_detail.html", {
-        "order": order_copy,
-    })
+    orders = Order.objects.all().order_by("-date_created")
+
+    if query:
+        q_filter = Q()
+        if search_name:
+            q_filter |= Q(client_name__icontains=query)
+        if search_phone:
+            q_filter |= Q(phone__icontains=query)
+        if search_comment:
+            q_filter |= Q(comment__icontains=query)
+        if search_master:
+            q_filter |= Q(master__name__icontains=query)
+        orders = orders.filter(q_filter)
+
+    return render(request, "orders.html", {"orders": orders})
