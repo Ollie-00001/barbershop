@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .data import masters_list, services_list, orders as orders_data
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.db.models import Q
-from .models import Order
+from .models import Order, Master, Review
 
 masters_by_id = {m["id"]: m["name"] for m in masters_list}
 
@@ -10,7 +10,12 @@ def is_staff_user(user):
     return user.is_staff
 
 def index(request):
-    return render(request, 'index.html')
+    masters = Master.objects.all()
+    reviews = Review.objects.all()
+    return render(request, 'index.html', {
+        "masters": masters,
+        "reviews": reviews
+    })
 
 def masters_view(request):
     return render(request, 'masters.html', {
