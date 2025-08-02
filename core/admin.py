@@ -39,7 +39,7 @@ class ReviewAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
     fieldsets = (
         (None, {
-            'fields': ('text', 'client_name', 'master', 'photo', 'created_at', 'rating', 'is_published')
+            'fields': ('text', 'client_name', 'master', 'photo', 'rating', 'is_published')
         }),
     )
 
