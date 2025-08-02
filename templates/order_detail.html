@@ -6,18 +6,26 @@
 {% block content %}
 <div class="container">
     <h1>Заявка №{{ order.id }}</h1>
-        <p><strong>Клиент:</strong> {{ order.client_name }}</p>
-        <p><strong>Дата:</strong> {{ order.date }}</p>
-        <p><strong>Мастер:</strong> {{ order.master_name }}</p>
-        <p><strong>Статус:</strong> {{ order.status }}</p>
-        <p><strong>Услуги:</strong></p>
+
+    <p><strong>Клиент:</strong> {{ order.client_name }}</p>
+    <p><strong>Телефон:</strong> {{ order.phone }}</p>
+    <p><strong>Дата создания:</strong> {{ order.date_created|date:"d.m.Y H:i" }}</p>
+    <p><strong>Дата и время записи:</strong> {{ order.appointment_date|date:"d.m.Y H:i" }}</p>
+    <p><strong>Мастер:</strong> {{ order.master.name|default:"Не назначен" }}</p>
+    <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+
+    <p><strong>Комментарий:</strong><br>{{ order.comment|linebreaks }}</p>
+
+    <p><strong>Услуги:</strong></p>
     <ul>
-        {% for service in order.services %}
-            <li>{{ service }}</li>
+        {% for service in order.services.all %}
+            <li>{{ service.name }}</li>
+        {% empty %}
+            <li>Нет услуг</li>
         {% endfor %}
     </ul>
 
-    <p><a href="{% url 'orders' %}">Вернуться к списку заявок</a></p>
+    <p><a href="{% url 'orders' %}">← Вернуться к списку заявок</a></p>
 </div>
 {% endblock %}
 
