@@ -13,6 +13,7 @@
     <p><strong>Дата и время записи:</strong> {{ order.appointment_date|date:"d.m.Y H:i" }}</p>
     <p><strong>Мастер:</strong> {{ order.master.name|default:"Не назначен" }}</p>
     <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+    <p><strong>Общая стоимость:</strong> {{ order.total_price|default:"0" }} ₽</p>
 
     <p><strong>Комментарий:</strong><br>{{ order.comment|linebreaks }}</p>
 
