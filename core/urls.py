@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -11,6 +11,7 @@ urlpatterns = [
     path('masters/', views.masters_view, name='masters'),
     path('services/', views.services_view, name='services'),
     path('appointment/', views.appointment, name='appointment'),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 if settings.DEBUG:
