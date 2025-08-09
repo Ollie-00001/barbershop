@@ -1,19 +1,52 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
-
-{% block title %}Заявки{% endblock %}
-
+{% block title %}Список заявок{% endblock %}
 {% block content %}
 <div class="container">
-    <h1>Все заявки</h1>
+    <h2 class="mb-4">Список заявок</h2>
 
-            {% for order in orders %}
-                {% include 'includes/order_card.html' with order=order %}
-            {% empty %}
-                <p>Заявок пока нет.</p>
-            {% endfor %}
-        </tbody>
-    </table>
+    <form method="get" class="mb-4">
+        <div class="input-group mb-2">
+            <input type="text" class="form-control" name="q" placeholder="Поиск..." value="{{ request.GET.q }}">
+            <button type="submit" class="btn btn-primary">Поиск</button>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="search_name" id="search_name" {% if request.GET.search_name != 'off' %}checked{% endif %}>
+            <label class="form-check-label" for="search_name">По имени</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="search_phone" id="search_phone" {% if request.GET.search_phone %}checked{% endif %}>
+            <label class="form-check-label" for="search_phone">По телефону</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="search_comment" id="search_comment" {% if request.GET.search_comment %}checked{% endif %}>
+            <label class="form-check-label" for="search_comment">По комментарию</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="search_master" id="search_master" {% if request.GET.master %}checked{% endif %}>
+            <label class="form-check-label" for="search_master">По мастерам</label>
+        </div>
+    </form>
+
+    <div class="row">
+        {% for order in orders %}
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ order.client_name }}</h5>
+                        <p><strong>Телефон:</strong> {{ order.phone }}</p>
+                        <p><strong>Мастер:</strong> {{ order.master.name }}</p>
+                        <p><strong>Дата записи:</strong> {{ order.appointment_date|date:"d.m.Y H:i" }}</p>
+                        <p><strong>Услуги:</strong> {{ order.display_services }}</p>
+                        <p class="text-muted">{{ order.date_created|date:"d.m.Y H:i" }}</p>
+                        <a href="{% url 'order_detail' order.pk %}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Заявок не найдено.</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
 

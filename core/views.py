@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .data import masters_list, services_list, orders as orders_data
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.db.models import Q, Sum
+from .models import Order, Master, Review
 
 masters_by_id = {m["id"]: m["name"] for m in masters_list}
 
@@ -8,7 +10,12 @@ def is_staff_user(user):
     return user.is_staff
 
 def index(request):
-    return render(request, 'index.html')
+    masters = Master.objects.all()
+    reviews = Review.objects.select_related("master").all()
+    return render(request, 'index.html', {
+        "masters": masters,
+        "reviews": reviews
+    })
 
 def masters_view(request):
     return render(request, 'masters.html', {
@@ -26,27 +33,33 @@ def appointment(request):
 def thanks(request):
     return render(request, 'thanks.html')
 
-@user_passes_test(is_staff_user)
+def order_detail(request, pk):
+    order = get_object_or_404(
+        Order.objects.select_related("master").prefetch_related("services").annotate(total_price=Sum("services__price")),
+        pk=pk
+    )
+    return render(request, "order_detail.html", {"order": order})
+
+@login_required
 def orders(request):
-    orders_with_master = []
-    for order in orders_data:
-        order_copy = order.copy()
-        order_copy["master_name"] = masters_by_id.get(order["master_id"], "Неизвестный мастер")
-        order_copy["status_class"] = order_copy["status"].strip().lower()
-        orders_with_master.append(order_copy)
+    query = request.GET.get("q", "")
+    search_name = request.GET.get("search_name", "on")
+    search_phone = request.GET.get("search_phone")
+    search_comment = request.GET.get("search_comment")
+    search_master = request.GET.get("search_master")
 
-    return render(request, "orders.html", {
-        "orders": orders_with_master,
-    })
+    orders = Order.objects.select_related("master").prefetch_related("services").order_by("-date_created")
 
-def order_detail(request, order_id):
-    order = next((o for o in orders_data if o["id"] == order_id), None)
-    if not order:
-        return render(request, "order_not_found.html", {"order_id": order_id}, status=404)
+    if query:
+        q_filter = Q()
+        if search_name:
+            q_filter |= Q(client_name__icontains=query)
+        if search_phone:
+            q_filter |= Q(phone__icontains=query)
+        if search_comment:
+            q_filter |= Q(comment__icontains=query)
+        if search_master:
+            q_filter |= Q(master__name__icontains=query)
+        orders = orders.filter(q_filter)
 
-    order_copy = order.copy()
-    order_copy["master_name"] = masters_by_id.get(order["master_id"], "Неизвестный мастер")
-
-    return render(request, "order_detail.html", {
-        "order": order_copy,
-    })
+    return render(request, "orders.html", {"orders": orders})

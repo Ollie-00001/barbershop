@@ -5,8 +5,62 @@
 
 {% block content %}
 <div class="container">
-    <h1 style="font-weight: bold;">Добро пожаловать!</h1>
-    <p>Вы находитесь на главной странице барбершопа</p>
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="display-8 fw-bold mb-4">О нас</h1>
+            <p class="lead mb-4">
+                <strong>Скаттер</strong> — это не просто барбершоп. Это место, где стригут не по моде, а по духу. Где каждый срез — это позиция, а каждый клиент — свой.
+            </p>
+            <p class="mb-4">
+                Открылись мы не для галочки и не ради тренда. <strong>Скаттер</strong> появился, когда стало ясно: мужскому стилю нужен характер, а не компромиссы. Мы не копируем никого — мы делаем по-своему. Грубо, точно, честно.
+            </p>
+            <p class="mb-4">
+                Наша философия — <strong>движ, свобода и точный фейд</strong>.<br>
+                Без показухи. Без понтов. Только ты, кресло, барбер и звук машинки.
+            </p>
+            <p class="mb-4">
+                Мы не просим доверия — мы его стрижём.
+            </p>
+            <div class="mt-5">
+                <h4 class="fw-semibold">Залетай в Скаттер.</h4>
+                <p class="fs-5">Срежем всё лишнее.</p>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mt-5 mb-3">Наши мастера</h2>
+    <div class="row">
+        {% for master in masters %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <img src="{{ master.photo.url }}" class="card-img-top object-fit-contain" style="height: 300px;" alt="{{ master.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ master.name }}</h5>
+                        <p class="card-text">Опыт: {{ master.experience }} лет</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Мастеров пока нет.</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="mt-5 mb-3">Отзывы клиентов</h2>
+    <div class="row">
+        {% for review in reviews %}
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ review.client_name }}</h5>
+                        <p class="card-text">{{ review.text }}</p>
+                        <p class="text-muted">Оценка: {{ review.rating }}/5</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Пока нет отзывов.</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
 

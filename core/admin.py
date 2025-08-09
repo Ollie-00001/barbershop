@@ -2,6 +2,10 @@ from django.contrib import admin
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .models import Master, Service, Review, Order
 
+admin.site.site_header = 'Панель управления барбершопа'
+admin.site.index_title = 'Администрирование'
+admin.site.site_title = 'Барбершоп "Скаттер" - Админка'
+
 @admin.register(Master)
 class MasterAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'address', 'experience', 'is_active', 'display_services')
@@ -39,13 +43,13 @@ class ReviewAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
     fieldsets = (
         (None, {
-            'fields': ('text', 'client_name', 'master', 'photo', 'created_at', 'rating', 'is_published')
+            'fields': ('text', 'client_name', 'master', 'photo', 'rating', 'is_published')
         }),
     )
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('client_name', 'phone', 'status', 'appointment_date', 'date_created', 'master', 'display_services')
+    list_display = ('client_name', 'phone', 'status', 'appointment_date', 'date_created', 'master', 'display_services_admin')
     search_fields = ('client_name', 'phone', 'master__name')
     list_filter = ('status', 'master')
     ordering = ('-date_created',)
@@ -59,9 +63,9 @@ class OrderAdmin(admin.ModelAdmin):
     date_hierarchy = 'date_created'
     actions = ['mark_as_completed', 'mark_as_canceled']
 
-    def display_services(self, obj):
-        return ", ".join([service.name for service in obj.services.all()])
-    display_services.short_description = "Услуги клиента"
+    def display_services_admin(self, obj):
+        return obj.display_services
+    display_services_admin.short_description = "Услуги клиента"
 
     class Meta:
         ordering = ['-date_created']
