@@ -3,13 +3,21 @@
 
 {% block title %}Наши мастера{% endblock %}
 {% block content %}
-<div class="container">
-    <h2>Наши мастера:</h2>
-    <ul>
-        {% for master in masters %}
-            <li>{{ master.name }}</li>
-        {% endfor %}
-    </ul>
+<h2 class="mt-5 mb-3">Наши мастера</h2>
+<div class="row">
+    {% for master in masters %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <img src="{{ master.photo.url }}" class="card-img-top object-fit-contain" style="height: 300px;" alt="{{ master.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ master.name }}</h5>
+                    <p class="card-text">Опыт: {{ master.experience }} лет</p>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Мастеров пока нет.</p>
+    {% endfor %}
 </div>
 {% endblock %}
 

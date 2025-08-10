@@ -4,14 +4,23 @@
 {% block title %}Услуги{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Услуги:</h2>
-    <ul>
-        {% for service in services %}
-            <li>{{ service }}</li>
-        {% endfor %}
-    </ul>
-</div>    
+<h2 class="mt-5 mb-3">Наши услуги</h2>
+<div class="row">
+    {% for service in services %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <img src="{{ service.photo.url }}" class="card-img-top object-fit-contain" style="height: 300px;" alt="{{ service.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ service.name }}</h5>
+                    <p class="card-text">{{ service.description }}</p>
+                    <p class="card-text"><strong>Цена:</strong> {{ service.price }} ₽</p>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Услуг пока нет.</p>
+    {% endfor %}
+</div>
 {% endblock %}
 
 {% block scripts %}
