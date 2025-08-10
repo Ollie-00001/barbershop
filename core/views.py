@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.db.models import Q, Sum
+
 from .models import Order, Master, Review, Service
+from .forms import ReviewForm, OrderForm
 
 masters_by_id = {m.id: m.name for m in Master.objects.all()}
 services_by_id = {s.id: s.name for s in Service.objects.all()}
@@ -34,6 +36,28 @@ def appointment(request):
 
 def thanks(request):
     return render(request, 'thanks.html')
+
+
+def create_review(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'thanks.html')
+    else:
+        form = ReviewForm()
+    return render(request, 'create_review.html', {'form': form})
+
+
+def create_order(request):
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'thanks.html')
+    else:
+        form = OrderForm()
+    return render(request, 'create_order.html', {'form': form})
 
 def order_detail(request, pk):
     order = get_object_or_404(
