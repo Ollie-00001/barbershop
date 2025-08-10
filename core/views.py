@@ -4,6 +4,7 @@ from django.db.models import Q, Sum
 
 from .models import Order, Master, Review, Service
 from .forms import ReviewForm, OrderForm
+from django.contrib import messages
 
 masters_by_id = {m.id: m.name for m in Master.objects.all()}
 services_by_id = {s.id: s.name for s in Service.objects.all()}
@@ -38,15 +39,18 @@ def thanks(request):
     return render(request, 'thanks.html')
 
 
+
 def create_review(request):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Your review has been submitted successfully!')
             return render(request, 'thanks.html')
     else:
         form = ReviewForm()
     return render(request, 'create_review.html', {'form': form})
+
 
 
 def create_order(request):
@@ -54,6 +58,7 @@ def create_order(request):
         form = OrderForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Your order has been submitted successfully!')
             return render(request, 'thanks.html')
     else:
         form = OrderForm()
