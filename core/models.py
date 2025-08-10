@@ -6,6 +6,7 @@ STATUS_CHOICES = [
     ("approved", "подтвержденная"),
     ("completed", "выполненная"), 
     ("canceled", "отмененная"),
+    ("in_progress", "в работе"),
 ]
 
 class Order(models.Model):
@@ -18,6 +19,10 @@ class Order(models.Model):
     master = models.ForeignKey('Master', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Мастер")
     services = models.ManyToManyField('Service', related_name="orders", verbose_name="Услуги")
     appointment_date = models.DateTimeField(verbose_name="Дата и время записи")
+
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
 
     def __str__(self):
         return f"{self.client_name} ({self.appointment_date.strftime('%d.%m %H:%M')})"
@@ -35,6 +40,10 @@ class Master(models.Model):
     services = models.ManyToManyField('Service', related_name="masters", verbose_name="Услуги")
     is_active = models.BooleanField(default=True, verbose_name="Активен")
 
+    class Meta:
+        verbose_name = "Мастер"
+        verbose_name_plural = "Мастера"
+
     def __str__(self):
         return self.name
 
@@ -45,6 +54,10 @@ class Service(models.Model):
     duration = models.PositiveIntegerField(verbose_name="Длительность", help_text="Время выполнения в минутах")
     is_popular = models.BooleanField(default=False, verbose_name="Популярная услуга")
     image = models.ImageField(upload_to="services/", blank=True, verbose_name="Изображение")
+
+    class Meta:
+        verbose_name = "Услуга"
+        verbose_name_plural = "Услуги"
 
     def __str__(self):
         return self.name
@@ -60,6 +73,10 @@ class Review(models.Model):
         verbose_name="Оценка"
     )
     is_published = models.BooleanField(default=True, verbose_name="Опубликован")
+
+    class Meta:
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
 
     def __str__(self):
         return f"{self.client_name or 'Аноним'} ({self.rating}/5)"
