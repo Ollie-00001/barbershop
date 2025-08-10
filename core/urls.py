@@ -11,6 +11,8 @@ urlpatterns = [
     path('masters/', views.masters_view, name='masters'),
     path('services/', views.services_view, name='services'),
     path('appointment/', views.appointment, name='appointment'),
+    path('review/create/', views.create_review, name='create_review'),
+    path('orders/create/', views.create_order, name='create_order'),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
 
