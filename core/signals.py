@@ -9,11 +9,11 @@ def order_services_changed(sender, instance, action, **kwargs):
         master = instance.master.name if instance.master else 'Not selected'
         services = ', '.join([s.name for s in instance.services.all()])
         text = (
-            f"*New Order!*\n"
-            f"*Client:* {instance.client_name}\n"
-            f"*Phone:* {instance.phone}\n"
-            f"*Master:* {master}\n"
-            f"*Services:* {services}\n"
-            f"*Date:* {instance.appointment_date.strftime('%d.%m.%Y %H:%M')}"
+            f"*У вас новый заказ!*\n"
+            f"*Клиент:* {instance.client_name}\n"
+            f"*Телефон:* {instance.phone}\n"
+            f"*Мастер:* {master}\n"
+            f"*Услуги:* {services}\n"
+            f"*Дата:* {instance.appointment_date.strftime('%d.%m.%Y %H:%M')}"
         )
         send_telegram_message(text)
