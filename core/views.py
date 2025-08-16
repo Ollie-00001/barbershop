@@ -46,7 +46,7 @@ def create_review(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Ваш отзыв был успешно отправлен!')
-            return render(request, 'thanks.html')
+            return render(request, 'thanks_4_review.html')
     else:
         form = ReviewForm()
     return render(request, 'create_review.html', {'form': form})
@@ -58,7 +58,7 @@ def create_order(request):
         form = OrderForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Ваш заказ был успешно отправлен!')
+            messages.success(request, 'Ваша заявка принята!')
             return render(request, 'thanks.html')
     else:
         form = OrderForm()
