@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Спасибо за отзыв{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Благодарим за Ваш отзыв!</h1>
+    <p>Приходите к нам снова!</p>
+
+    <p>Вы будете перенаправлены на главную через <span id="countdown">5</span> секунд.</p>
+
+    <a href="{% url 'index' %}" class="button">Вернуться на главную</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'script.js' %}"></script>
+{% endblock %}
