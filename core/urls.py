@@ -13,6 +13,7 @@ urlpatterns = [
     path('appointment/', views.appointment, name='appointment'),
     path('review/create/', views.create_review, name='create_review'),
     path('orders/create/', views.create_order, name='create_order'),
+    path('ajax/get_master_services/', __import__('core.ajax').ajax.get_master_services, name='get_master_services'),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
 
