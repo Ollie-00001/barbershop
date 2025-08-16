@@ -1,4 +1,5 @@
 import os
+import asyncio
 from django.conf import settings
 from telegram import Bot
 from dotenv import load_dotenv
@@ -10,11 +11,15 @@ TELEGRAM_CHAT_ID = getattr(settings, 'TELEGRAM_CHAT_ID', os.getenv('TELEGRAM_CHA
 
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 
-def send_telegram_message(text):
+def send_telegram_message(text: str):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         return
-    try:
-        bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=text, parse_mode='Markdown')
-    except Exception as e:
-        # Optionally log error
-        pass
+
+    async def _send():
+        try:
+            print("Sending telegram message:", text)
+            await bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=text, parse_mode='Markdown')
+        except Exception as e:
+            print("Error sending telegram message:", e)
+
+    asyncio.run(_send())
