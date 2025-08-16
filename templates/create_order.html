@@ -6,11 +6,77 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h2 class="mb-4">Создать заявку</h2>
-            <form method="post">
+            <form method="post" id="order-form">
                 {% csrf_token %}
-                {{ form.as_p }}
+                <div class="mb-3">
+                    {{ form.master.label_tag }}
+                    {{ form.master }}
+                </div>
+                <div class="mb-3" id="services-field" style="display:none;">
+                    <label for="services-container" class="form-label">Услуги</label>
+                    <div id="services-container"></div>
+                </div>
+                <div class="mb-3">
+                    {{ form.client_name.label_tag }}
+                    {{ form.client_name }}
+                </div>
+                <div class="mb-3">
+                    {{ form.phone.label_tag }}
+                    {{ form.phone }}
+                </div>
+                <div class="mb-3">
+                    {{ form.comment.label_tag }}
+                    {{ form.comment }}
+                </div>
+                <div class="mb-3">
+                    {{ form.appointment_date.label_tag }}
+                    {{ form.appointment_date }}
+                </div>
                 <button type="submit" class="btn btn-success">Отправить</button>
             </form>
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const masterSelect = document.getElementById('id_master');
+                const servicesField = document.getElementById('services-field');
+                const servicesContainer = document.getElementById('services-container');
+                function updateServices() {
+                    const masterId = masterSelect.value;
+                    fetch(`/ajax/get_master_services/?master_id=${masterId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const services = data.services;
+                            servicesContainer.innerHTML = '';
+                            if (services.length === 0) {
+                                servicesField.style.display = 'none';
+                                return;
+                            } else {
+                                servicesField.style.display = '';
+                            }
+                            services.forEach(service => {
+                                const div = document.createElement('div');
+                                div.className = 'form-check';
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.name = 'services';
+                                checkbox.value = service.id;
+                                checkbox.className = 'form-check-input';
+                                checkbox.id = 'service_' + service.id;
+                                const label = document.createElement('label');
+                                label.className = 'form-check-label';
+                                label.htmlFor = checkbox.id;
+                                label.appendChild(document.createTextNode(service.name));
+                                div.appendChild(checkbox);
+                                div.appendChild(label);
+                                servicesContainer.appendChild(div);
+                            });
+                        });
+                }
+                if (masterSelect) {
+                    masterSelect.addEventListener('change', updateServices);
+                    updateServices();
+                }
+            });
+            </script>
         </div>
     </div>
 </div>
