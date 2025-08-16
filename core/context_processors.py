@@ -3,7 +3,8 @@ def menu_items(request):
         {'title': 'О нас', 'url': 'index'},
         {'title': 'Услуги', 'url': 'services'},
         {'title': 'Мастера', 'url': 'masters'},
-        {'title': 'Запись', 'url': 'appointment'},
+        {'title': 'Запись', 'url': 'create_order'},
+        {'title': 'Отзывы', 'url': 'create_review'},
     ]
 
     if request.user.is_authenticated and request.user.is_staff:
