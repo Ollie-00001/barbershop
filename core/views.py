@@ -1,96 +1,85 @@
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import user_passes_test, login_required
-from django.db.models import Q, Sum
 
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.urls import reverse_lazy
+from django.db.models import Q, Sum
 from .models import Order, Master, Review, Service
 from .forms import ReviewForm, OrderForm
 from django.contrib import messages
 
-masters_by_id = {m.id: m.name for m in Master.objects.all()}
-services_by_id = {s.id: s.name for s in Service.objects.all()}
+class IndexView(TemplateView):
+    template_name = 'index.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['masters'] = Master.objects.all()
+        context['reviews'] = Review.objects.select_related('master').all()
+        return context
 
-def is_staff_user(user):
-    return user.is_staff
+class MastersView(TemplateView):
+    template_name = 'masters.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['masters'] = Master.objects.all()
+        return context
 
-def index(request):
-    masters = Master.objects.all()
-    reviews = Review.objects.select_related("master").all()
-    return render(request, 'index.html', {
-        "masters": masters,
-        "reviews": reviews
-    })
+class ServicesView(TemplateView):
+    template_name = 'services.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['services'] = Service.objects.all()
+        return context
 
-def masters_view(request):
-    masters = Master.objects.all()
-    return render(request, 'masters.html', {
-                  "masters": masters,
-                  })
+class AppointmentView(TemplateView):
+    template_name = 'appointment.html'
 
-def services_view(request):
-    services = Service.objects.all()
-    return render(request, 'services.html', {
-                  "services": services,
-                  })
+class ThanksView(TemplateView):
+    template_name = 'thanks.html'
 
-def appointment(request):
-    return render(request, 'appointment.html')
+class ReviewCreateView(CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'create_review.html'
+    success_url = reverse_lazy('thanks')
+    def form_valid(self, form):
+        messages.success(self.request, 'Ваш отзыв был успешно отправлен!')
+        return super().form_valid(form)
 
-def thanks(request):
-    return render(request, 'thanks.html')
+class OrderCreateView(CreateView):
+    model = Order
+    form_class = OrderForm
+    template_name = 'create_order.html'
+    success_url = reverse_lazy('thanks')
+    def form_valid(self, form):
+        messages.success(self.request, 'Ваша заявка принята!')
+        return super().form_valid(form)
 
+class OrderDetailView(DetailView):
+    model = Order
+    template_name = 'order_detail.html'
+    context_object_name = 'order'
+    def get_queryset(self):
+        return Order.objects.select_related('master').prefetch_related('services').annotate(total_price=Sum('services__price'))
 
-
-def create_review(request):
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Ваш отзыв был успешно отправлен!')
-            return render(request, 'thanks_4_review.html')
-    else:
-        form = ReviewForm()
-    return render(request, 'create_review.html', {'form': form})
-
-
-
-def create_order(request):
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Ваша заявка принята!')
-            return render(request, 'thanks.html')
-    else:
-        form = OrderForm()
-    return render(request, 'create_order.html', {'form': form})
-
-def order_detail(request, pk):
-    order = get_object_or_404(
-        Order.objects.select_related("master").prefetch_related("services").annotate(total_price=Sum("services__price")),
-        pk=pk
-    )
-    return render(request, "order_detail.html", {"order": order})
-
-@login_required
-def orders(request):
-    query = request.GET.get("q", "")
-    search_name = request.GET.get("search_name", "on")
-    search_phone = request.GET.get("search_phone")
-    search_comment = request.GET.get("search_comment")
-    search_master = request.GET.get("search_master")
-
-    orders = Order.objects.select_related("master").prefetch_related("services").order_by("-date_created")
-
-    if query:
-        q_filter = Q()
-        if search_name:
-            q_filter |= Q(client_name__icontains=query)
-        if search_phone:
-            q_filter |= Q(phone__icontains=query)
-        if search_comment:
-            q_filter |= Q(comment__icontains=query)
-        if search_master:
-            q_filter |= Q(master__name__icontains=query)
-        orders = orders.filter(q_filter)
-
-    return render(request, "orders.html", {"orders": orders})
+class OrdersListView(ListView):
+    model = Order
+    template_name = 'orders.html'
+    context_object_name = 'orders'
+    ordering = ['-date_created']
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('master').prefetch_related('services')
+        query = self.request.GET.get('q', '')
+        search_name = self.request.GET.get('search_name', 'on')
+        search_phone = self.request.GET.get('search_phone')
+        search_comment = self.request.GET.get('search_comment')
+        search_master = self.request.GET.get('search_master')
+        if query:
+            q_filter = Q()
+            if search_name:
+                q_filter |= Q(client_name__icontains=query)
+            if search_phone:
+                q_filter |= Q(phone__icontains=query)
+            if search_comment:
+                q_filter |= Q(comment__icontains=query)
+            if search_master:
+                q_filter |= Q(master__name__icontains=query)
+            queryset = queryset.filter(q_filter)
+        return queryset
