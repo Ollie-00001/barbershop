@@ -1,3 +1,5 @@
+# Email backend for password reset (Mail.ru SMTP)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Telegram bot settings
 import os
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
