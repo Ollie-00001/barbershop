@@ -7,6 +7,18 @@
                     <a href="{% url item.url %}">{{ item.title }}</a>
                 </li>
             {% endfor %}
+            {% if user.is_authenticated %}
+                <li><span class="nav-user">{{ user.username }}</span></li>
+                <li>
+                    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link nav-link" style="padding:0;">Logout</button>
+                    </form>
+                </li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
+            {% endif %}
         </ul>
     </div>
 </nav>
